@@ -14,6 +14,7 @@ const SearchBox = ({searchChange}) => {
                 placeholder="Search Robots"
                 type='search'
                 onChange={searchChange}
+                style={{outline: 'none'}}
             />
         </div>
     )
