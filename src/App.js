@@ -1,32 +1,40 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import 'tachyons'; 
 import CardList from './CardList';
 import SearchBox from './SearchBox';
 import Scroll from './Scroll';
 import './App.css'
 
-class App extends Component{
-  constructor(){
-    super();
-    this.state = {
-      robots: [],
-      searchfield: ''
-    }
-  }
-
-  componentDidMount(){
-    fetch('https://jsonplaceholder.typicode.com/users')
-    .then(res => res.json())
-    .then(data => this.setState({robots:data}))
-    .catch(err => console.log(err))
-  }
-
-  onSearchChange = (event) =>{
-      this.setState({searchfield:event.target.value})
-  }
+function App(){
   
-  render(){
-    const {robots, searchfield} = this.state
+    // this.state = {
+    //   robots: [],
+    //   searchfield: ''
+    // }
+  
+    const [robots, setRobots] = useState([]);
+    const [searchfield, setSerchfield] = useState('');
+    const [count, setCount] = useState(0)
+
+
+    useEffect(() =>{
+      fetch('https://jsonplaceholder.typicode.com/users')
+      .then(res => res.json())
+      .then(data => setRobots(data))
+      .catch(err => console.log(err))
+      console.log(count )
+    }, [count])
+  // componentDidMount(){
+    //fetch('https://jsonplaceholder.typicode.com/users')
+    // .then(res => res.json())
+    // .then(data => this.setState({robots:data}))
+    // .catch(err => console.log(err))
+  // }
+
+  const onSearchChange = (event) =>{
+      setSerchfield(event.target.value)
+  }
+   
 
     const filteredRobots = robots.filter(robot => {
       return robot.name.toLocaleLowerCase()
@@ -41,12 +49,13 @@ class App extends Component{
     
         <div className="App">
           <h1 className='tc'>RoboFriends</h1>
-          <SearchBox searchChange = {this.onSearchChange} />
+          <button onClick={() => setCount(count + 1)}>Click</button>
+          <SearchBox searchChange = {onSearchChange} />
           <Scroll>
           <CardList robots = {filteredRobots}/>
           </Scroll>
         </div>
-  }
+  
   
 }
 
@@ -59,3 +68,7 @@ export default App;
 // Then we pass it as props to the CardList component
 
 // Whenever we type in something into the input box,The onsearchChange function sets the state to that value
+
+// useState does array destructuring. I accepts a variable and a function and sets its initial state to be whatever u put into the params
+// const [count, setCount] = useState(0)
+// to change the state of count, u do setCount(whatever u want the new state to be)
